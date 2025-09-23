@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="Visual_GenIR: Generative Visual Feedback for Mental Image Retrieval">
+  <meta name="keywords" content="GenIR, Mental Image Retrieval, Generative Visual Feedback">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Visual_GenIR: Generative Visual Feedback for Mental Image Retrieval</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+  rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+  href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="icon" href="./static/images/icon.png">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+  
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+  <!-- <script src="https://assets.crowd.aws/crowd-html-elements.js"></script> -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+
+  <style>
+	    
+		.image-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px; /* Adjust the gap between images as needed */
+        }
+        .image-container {
+	        position: relative;            
+	        display: inline-block;
+            text-align: center;
+            width: 45%; /* Adjust the width of each container as needed */
+            
+        }
+        .image-container img {
+            width: 100%; /* Ensures the image fills the container width */
+        }
+        .image-container p {
+            font-family: "Times New Roman", Times, serif;
+            font-weight: bold;
+        }
+       
+        .image-container p {
+            font-family: "Times New Roman", Times, serif;
+            font-weight: bold;
+        }
+        .has-text-centered {
+            text-align: center;
+            font-size: 16px;
+        }
+        .has-text-left {
+            font-size: 16px;
+        }
+        
+        #image-container {
+            position: relative;
+            display: inline-block;
+        }
+        #startButton {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #imageModal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+            z-index: 1;
+        }
+        #imageModalContent {
+            position: relative;
+            margin: auto;
+            padding: 0px;
+            width: 360px;
+            max-width: 360px;
+            background-color: #fff;
+            border-radius: 10px;
+        }
+        #imageContainer {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+            height: auto;
+        }
+        .dot {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: rgba(255, 0, 0, 0.5); /* Red with 50% opacity */
+            border-radius: 50%;
+        }
+        .bbox {
+            position: absolute;
+            border: 4px solid red; /* Red border for bbox */
+        }
+        .bbox-large {
+            position: absolute;
+            border: 8px solid blue; /* Green border for bbox_large */
+        }
+        crowd-alert {
+            display: none !important;
+        }
+        
+        /* Tab functionality */
+        .tab-content .tab-pane {
+            display: none;
+        }
+        .tab-content .tab-pane.is-active {
+            display: block;
+        }
+  </style>
+  
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <div style="display: flex; align-items: center; justify-content: center;">
+            <h1 class="title is-1 publication-title" style="display: inline-block;">GenIR: Generative Visual Feedback for Mental Image Retrieval</h1>
+          </div>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://dyang39.github.io/">Diji Yang</a><sup style="color: #FFB6C1;">1*</sup>,</span>
+            <span class="author-block">
+              <a href="https://mikelmh025.github.io/Minghao-web-page/">Minghao Liu</a><sup style="color: #FFB6C1;">1*</sup>,</span>
+            <span class="author-block">
+              <a href="#">Chung-Hsiang Lo</a><sup style="color: #FFB6C1;">2</sup>,</span>
+            <span class="author-block">
+              <a href="https://sites.google.com/ucsc.edu/yizhang/home">Yi Zhang</a><sup style="color: #FFB6C1;">1</sup>,</span>
+            <span class="author-block">
+              <a href="https://users.soe.ucsc.edu/~davis/">James Davis</a><sup style="color: #FFB6C1;">1</sup>,</span>
+            <span class="author-block">
+          </div>
+          <div class="is-size-6 publication-authors">
+            <span class="author-block"><sup style="color: #FFB6C1;">*</sup>Equal contribution</span>
+          </div>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup style="color: #FFB6C1;">1</sup>UC Santa Cruz,</span>
+            <span class="author-block"><sup style="color: #FFB6C1;">2</sup>Northeastern University</span>
+          </div>
+          
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2506.06220"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                    <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://github.com/visual-generative-ir/visual-generative-ir"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+              <!-- HF Link. -->
+              <span class="link-block">
+                <a href="https://huggingface.co/datasets/dyang39/GenIR"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                    <img src="https://huggingface.co/front/assets/huggingface_logo-noborder.svg" 
+                         alt="HuggingFace" style="height: 1em;">
+                  </span>
+                  <span>Dataset</span>
+                </a>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Vision-language models (VLMs) have shown strong performance on text-to-image retrieval benchmarks. However, bridging this success to real-world applications remains a challenge. In practice, human search behavior is rarely a one-shot action. Instead, it is often a multi-round process guided by clues in mind. That is, a mental image ranging from vague recollections to vivid mental representations of the target image. Motivated by this gap, we study the task of Mental Image Retrieval (MIR), which targets the realistic yet underexplored setting where users refine their search for a mentally envisioned image through multi-round interactions with an image search engine. Central to successful interactive retrieval is the capability of machines to provide users with clear, actionable feedback; however, existing methods rely on indirect or abstract verbal feedback, which can be ambiguous, misleading, or ineffective for users to refine the query. To overcome this, we propose GenIR, a generative multi-round retrieval paradigm leveraging diffusion-based image generation to explicitly reify the AI system’s understanding at each round. These synthetic visual representations provide clear, interpretable feedback, enabling users to refine their queries intuitively and effectively. We further introduce a fully automated pipeline to generate a high-quality multi-round MIR dataset. Experimental results demonstrate that GenIR significantly outperforms existing interactive methods in the MIR scenario. This work establishes a new task with a dataset and an effective generative retrieval method, providing a foundation for future research in this direction.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-five-fifths">
+        <h2 class="title is-3">Overview</h2> 
+      </div>
+    </div>
+
+    <div class="columns is-centered has-text-centered">
+      <div class="image-container" style="width: 95%; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);">
+        <img src="./static/image/overview.png" alt="GIR Overview" style="max-width: 100%;">
+      </div>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-10">
+        <h3 style="text-align: left; margin-top: 15px;">
+          <strong>GenIR</strong> turns system understanding into <strong>synthetic images</strong> for user feedback, 
+          enabling <strong>clearer and more effective multi-round refinement</strong> than traditional verbal-feedback-only methods.
+        </h3>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-five-fifths">
+        <h2 class="title is-3">Main Results</h2> 
+      </div>
+    </div>
+    
+    <div class="columns is-centered has-text-centered">
+      <div class="image-container" style="width: 80%;box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);">
+        <img src="./static/image/coco.png" alt="GIR Method">
+      </div>
+    </div>
+    
+    <div class="columns is-centered">
+      <div class="column is-10">
+        <h3 style="text-align: left; margin-top: 20px; margin-bottom: 40px;">
+          <p>
+           Performance Comparison on MSCOCO Dataset (Hits@10, 50k search space): <strong>Left:</strong> Our GenIR approach with Infinity diffusion model (Yellow) significantly outperforms all baselines, including Prediction Feedback (blue), Verbal Feedback with Gemma3-12b (red), and ChatIR with Text-based retrieval (green). <strong>Right:</strong> Comparison of different text-to-image diffusion models within our GenIR framework, showing <strong>consistent performance advantages across all generators</strong>.
+          </p>
+        </h3>
+      </div>
+    </div>
+
+    <div class="columns is-centered has-text-centered">
+      <div class="image-container" style="width: 80%;box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);">
+        <img src="./static/image/refinement_vis.jpg" alt="GIR Method">
+      </div>
+    </div>
+
+    <div class="columns is-centered">
+      <div class="column is-10">
+        <h3 style="text-align: left; margin-top: 20px;">
+          <p>
+            Visual progression of GenIR's image refinement process: Each row shows the evolution from initial generation (leftmost), through multiple feedback iterations (middle columns), to final generated result, alongside the target image (rightmost). Note how generated images progressively capture more accurate details with each iteration—improving clothing and posture (<strong>row 1</strong>), facial features and giraffe positioning (<strong>row 2</strong>), and dining scene composition (<strong>row 3</strong>).
+          </p>
+        </h3>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-five-fifths">
+        <h2 class="title is-3">Dataset</h2> 
+      </div>
+    </div>
+    
+    <div class="columns is-centered has-text-centered">
+      <div class="image-container" style="width: 80%;box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);">
+        <img src="./static/image/refinement_text.png" alt="Dataset">
+      </div>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-10">
+        <h3 style="text-align: left; margin-top: 20px;">
+          <p>
+           We introduce a fully automated pipeline to generate a high-quality multi-round MIR dataset. Each data point contains a target image and a 10 rounds of <strong>visual feedback in images together with a refined text query</strong>.
+          </p>
+        </h3>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>
+      @article{yang2025genir,
+        title={GenIR: Generative Visual Feedback for Mental Image Retrieval},
+        author={Yang, Diji and Liu, Minghao and Lo, Chung-Hsiang and Zhang, Yi and Davis, James},
+        journal={arXiv preprint arXiv:2506.06220},
+        year={2025}
+      }
+    </code></pre>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            This website is adapted from <a rel="license"
+            href="https://github.com/nerfies/nerfies.github.io">Nerfies</a> and <a rel="license"
+            href="https://gligen.github.io/">GLIGEN</a>, licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
+            This website is licensed under a <a rel="license"
+                                                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Additional libraries for parsing CSV -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-csv/1.0.21/jquery.csv.min.js"></script>
+
+<!-- Tab functionality for Examples section -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // Get all tabs
+  const tabs = document.querySelectorAll('.tabs li');
+  const tabContentPanes = document.querySelectorAll('.tab-content .tab-pane');
+  
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      // Remove 'is-active' class from all tabs
+      tabs.forEach(item => {
+        item.classList.remove('is-active');
+      });
+      
+      // Add 'is-active' class to clicked tab
+      tab.classList.add('is-active');
+      
+      // Hide all tab panes
+      tabContentPanes.forEach(pane => {
+        pane.classList.remove('is-active');
+      });
+      
+      // Show the corresponding tab pane
+      const tabId = tab.getAttribute('data-tab');
+      document.getElementById('tab-' + tabId).classList.add('is-active');
+    });
+  });
+});
+</script>
+
+</body>
+</html>
